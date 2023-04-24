@@ -25,12 +25,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
         initViews()
-        showTestData(controller.getNextQuestion())
-        controller.shuffle()
 
+        loadData()
     }
-
 
     private fun initViews() {
 
@@ -52,6 +52,32 @@ class MainActivity : AppCompatActivity() {
         variants.add(findViewById(R.id.textView4))
 
         setClickEvent()
+    }
+
+    private fun loadData() {
+        val position = intent.getIntExtra("position", 0)
+        when (position) {
+            0 -> {
+                funMathematics()
+            }
+            1 -> {
+                funHistory()
+            }
+
+        }
+    }
+
+    private fun funHistory() {
+        controller.shuffle()
+        controller.history()
+        showTestData(controller.getNextQuestion())
+    }
+
+    private fun funMathematics() {
+        controller.shuffle()
+        controller.mathematics()
+        showTestData(controller.getNextQuestion())
+
     }
 
     private fun setClickEvent() {
@@ -80,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showTestData(testData: TestData) {
 
-        if (count < 3) {
+        if (count <= 2) {
             clearActions()
             count++
             question.text = testData.question
@@ -92,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             textCount2.text = "$count question"
         } else {
             val i = Intent(this, ResultActivity::class.java)
-            i.putExtra("count",controller.correctCount)
+            i.putExtra("count", controller.correctCount)
             startActivity(i)
             finish()
         }
